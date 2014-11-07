@@ -1,0 +1,17 @@
+{namespace com.episerver.buglink}
+
+/**
+ * @param links The count of TODOs in this PR.
+ */
+{template .prOverviewPanel}
+    <span>Related work items:</span>
+    <ul>
+    {foreach $link in $links}
+            <li >
+                <a href="{$link.href}" target="_blank">{$link.title}</a>
+            </li>
+        {ifempty}
+            <li>No related work items</li>
+        {/foreach}
+    </ul>
+{/template}

@@ -1,0 +1,45 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+    </plugin-info>
+
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="i18n" location="buglink"/>
+    
+    <!-- add our web resources -->
+    <web-resource key="buglink-resources" name="buglink Web Resources">
+
+        <transformation extension="soy">
+            <transformer key="soyTransformer" />
+        </transformation>
+
+        <resource type="download" name="buglink.soy.js" location="/buglink.soy" />
+        <resource type="download" name="buglink.css" location="/css/buglink.css"/>
+        <resource type="download" name="buglink.js" location="/js/buglink.js"/>
+        <resource type="download" name="images/" location="/images"/>
+
+        <context>buglink</context>
+
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <dependency>com.atlassian.stash.stash-web-api:pull-request-web-panels</dependency>
+
+    </web-resource>
+    
+    <!-- publish our component -->
+    <component key="myPluginComponent" class="com.episerver.buglink.MyPluginComponentImpl" public="true">
+        <interface>com.episerver.buglink.MyPluginComponent</interface>
+    </component>
+    
+    <!-- import from the product container -->
+    <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" />
+
+    <client-web-panel name="Related Work Items" key="pr-overview-related-bugs" location="stash.pull-request.related-entities" weight="2000">
+        <client-context-provider>episerver.buglink.getBugs</client-context-provider>
+        <resource name="view" type="soy" location="com.episerver.buglink.buglink:buglink-resources/com.episerver.buglink.prOverviewPanel" />
+    </client-web-panel>
+    
+</atlassian-plugin>
