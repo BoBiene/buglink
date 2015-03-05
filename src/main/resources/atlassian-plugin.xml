@@ -5,6 +5,7 @@
         <vendor name="${project.organization.name}" url="${project.organization.url}" />
         <param name="plugin-icon">images/pluginIcon.png</param>
         <param name="plugin-logo">images/pluginLogo.png</param>
+        <param name="configure.url">/plugins/servlet/buglink/admin</param>
     </plugin-info>
 
     <!-- add our i18n resource -->
@@ -28,7 +29,8 @@
         <dependency>com.atlassian.stash.stash-web-api:pull-request-web-panels</dependency>
 
     </web-resource>
-    
+
+
     <!-- publish our component -->
     <component key="myPluginComponent" class="com.episerver.buglink.MyPluginComponentImpl" public="true">
         <interface>com.episerver.buglink.MyPluginComponent</interface>
@@ -41,5 +43,31 @@
         <client-context-provider>episerver.buglink.getBugs</client-context-provider>
         <resource name="view" type="soy" location="com.episerver.buglink.buglink:buglink-resources/com.episerver.buglink.prOverviewPanel" />
     </client-web-panel>
-    
+
+
+    <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager" />
+    <component-import key="loginUriProvider" interface="com.atlassian.sal.api.auth.LoginUriProvider" />
+    <component-import key="renderer" interface="com.atlassian.templaterenderer.velocity.one.six.VelocityTemplateRenderer" />
+
+    <servlet key="admin-servlet" class="com.episerver.buglink.AdminServlet">
+        <url-pattern>/buglink/admin</url-pattern>
+    </servlet>
+
+    <web-resource name="Admin Web Resources" key="buglink-admin-resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <resource type="download" name="admin.js" location="/js/admin.js"/>
+    </web-resource>
+
+    <component-import key="pluginSettingsFactory" interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory" />
+    <component-import key="transactionTemplate" interface="com.atlassian.sal.api.transaction.TransactionTemplate" />
+
+    <rest key="rest" path="/buglink-admin" version="1.0">
+        <description>Provides REST resources for the admin UI.</description>
+    </rest>
+
+    <web-item key="refapp-menu-item" name="Buglink Admin" section="system.admin/general" weight="10" application="refapp">
+        <description>Link to xproduct-admin page.</description>
+        <label key="buglink.admin.label" />
+        <link linkId="buglink-admin-link">/plugins/servlet/buglink/admin</link>
+    </web-item>
 </atlassian-plugin>
