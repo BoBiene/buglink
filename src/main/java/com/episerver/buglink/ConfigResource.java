@@ -28,27 +28,27 @@ public class ConfigResource
     @XmlAccessorType(XmlAccessType.FIELD)
     public static final class Config
     {
-        @XmlElement private String name;
-        @XmlElement private int time;
+        @XmlElement private String regex;
+        @XmlElement private String urlTemplate;
 
-        public String getName()
+        public String getRegex()
         {
-            return name;
+            return regex;
         }
 
-        public void setName(String name)
+        public void setRegex(String regex)
         {
-            this.name = name;
+            this.regex = regex;
         }
 
-        public int getTime()
+        public String getUrlTemplate()
         {
-            return time;
+            return urlTemplate;
         }
 
-        public void setTime(int time)
+        public void setUrlTemplate(String urlTemplate)
         {
-            this.time = time;
+            this.urlTemplate = urlTemplate;
         }
     }
 
@@ -81,13 +81,10 @@ public class ConfigResource
             {
                 PluginSettings settings = pluginSettingsFactory.createGlobalSettings();
                 Config config = new Config();
-                config.setName((String) settings.get(Config.class.getName() + ".name"));
+                config.setRegex((String) settings.get(Config.class.getName() + ".regex"));
 
-                String time = (String) settings.get(Config.class.getName() + ".time");
-                if (time != null)
-                {
-                    config.setTime(Integer.parseInt(time));
-                }
+                config.setUrlTemplate((String) settings.get(Config.class.getName() + ".urlTemplate"));
+
                 return config;
             }
         })).build();
@@ -108,8 +105,8 @@ public class ConfigResource
             public Object doInTransaction()
             {
                 PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
-                pluginSettings.put(Config.class.getName() + ".name", config.getName());
-                pluginSettings.put(Config.class.getName()  +".time", Integer.toString(config.getTime()));
+                pluginSettings.put(Config.class.getName() + ".regex", config.getRegex());
+                pluginSettings.put(Config.class.getName()  +".urlTemplate", config.getUrlTemplate());
                 return null;
             }
         });

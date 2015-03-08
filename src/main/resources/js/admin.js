@@ -6,17 +6,21 @@ AJS.toInit(function() {
       url: baseUrl + "/rest/buglink-admin/1.0/",
       dataType: "json",
       success: function(config) {
-        AJS.$("#name").attr("value", config.name);
-        AJS.$("#time").attr("value", config.time);
+        AJS.$("#regex").attr("value", config.regex);
+        AJS.$("#urlTemplate").attr("value", config.urlTemplate);
       }
     });
   }
   function updateConfig() {
+    var data = {
+        regex: AJS.$("#regex").attr("value"),
+        urlTemplate: AJS.$("#urlTemplate").attr("value")
+    }
     AJS.$.ajax({
       url: baseUrl + "/rest/buglink-admin/1.0/",
       type: "PUT",
       contentType: "application/json",
-      data: '{ "name": "' + AJS.$("#name").attr("value") + '", "time": ' +  AJS.$("#time").attr("value") + ' }',
+      data: JSON.stringify(data),
       processData: false
     });
   }  

@@ -10,7 +10,7 @@
 
     <!-- add our i18n resource -->
     <resource type="i18n" name="i18n" location="buglink"/>
-    
+    <useFastdevCli>false</useFastdevCli>
     <!-- add our web resources -->
     <web-resource key="buglink-resources" name="buglink Web Resources">
 
@@ -38,7 +38,8 @@
     
     <!-- import from the product container -->
     <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" />
-
+    <template-context-item key="applicationPropertiesContextItem" component-ref="applicationProperties"
+                           context-key="applicationProperties" name="Application Properties Context Item"/>
     <client-web-panel name="Related Work Items" key="pr-overview-related-bugs" location="stash.pull-request.related-entities" weight="2000">
         <client-context-provider>episerver.buglink.getBugs</client-context-provider>
         <resource name="view" type="soy" location="com.episerver.buglink.buglink:buglink-resources/com.episerver.buglink.prOverviewPanel" />
