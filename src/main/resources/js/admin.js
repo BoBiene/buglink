@@ -1,6 +1,6 @@
 AJS.toInit(function() {
-  var baseUrl = AJS.$("meta[name='application-base-url']").attr("content");
-    
+  var baseUrl = AJS.contextPath();
+
   function populateForm() {
     AJS.$.ajax({
       url: baseUrl + "/rest/buglink-admin/1.0/",
@@ -21,7 +21,13 @@ AJS.toInit(function() {
       type: "PUT",
       contentType: "application/json",
       data: JSON.stringify(data),
-      processData: false
+      processData: false,
+      success: function() {
+        AJS.messages.success({
+          title: "Saved!",
+          fadeout: true
+        })
+      }
     });
   }  
   populateForm();

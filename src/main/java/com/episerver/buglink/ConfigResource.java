@@ -110,6 +110,8 @@ public class ConfigResource
                 return null;
             }
         });
-        return Response.noContent().build();
+        return Response.status(Status.OK).build();
+
+
     }
 }
