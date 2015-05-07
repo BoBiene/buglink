@@ -1,7 +1,18 @@
 (function($) {
+    var baseUrl, regex, header, urlPattern, bugs;
+
     window.episerver = window.episerver || {};
     window.episerver.buglink = episerver.buglink || {};
-    window.episerver.buglink.getBugs = function() {
+
+    window.episerver.buglink.isAnyBugLink = function() {
+        bugs = window.episerver.buglink.getBugs();
+        return bugs && bugs.links && bugs.links.length > 0;
+    };
+    window.episerver.buglink.getBugs = function(context) {
+        if (bugs) {
+            return bugs;
+        }
+        loadConfiguration();
         var pr = require('model/page-state').getPullRequest(),
             project = require('model/page-state').getProject(),
             repository = require('model/page-state').getRepository(),
@@ -10,6 +21,7 @@
         if (pr && pr.attributes
             && project && project.attributes
             && repository && repository.attributes) {
+
             if (pr.attributes.title) {
                 links = links.concat(getLinks(pr.attributes.title));
             }
@@ -21,7 +33,7 @@
                 links = links.concat(getLinks(pr.attributes.fromRef.attributes.displayId));
             }
 
-            var url = "/stash/rest/api/1.0/projects/"+project.attributes.key
+            var url = baseUrl + "/rest/api/1.0/projects/"+project.attributes.key
                         +"/repos/"+repository.attributes.slug
                         +"/pull-requests/"+pr.attributes.id
                         +"/commits?withCounts=true";
@@ -32,29 +44,46 @@
                         links = links.concat(getLinks(commit.message));
                     })
                 },
-                async: false // TODO: Consider async: true, when find how to render SOY template with async data
+                async: false // TODO: Consider async: true, when this is fixed https://jira.atlassian.com/browse/STASH-7330
             });
         }
 
-        var seen={}, uniqueLinks = $.grep(links, function(l) {
+        var seen = {}, uniqueLinks = $.grep(links, function(l) {
             if (seen[l.title]) {
                 return false;
             }
             seen[l.title] = true;
             return true;
         });
-        return {links: uniqueLinks};
+        return {links: uniqueLinks, header: header || ""};
     };
-
     function getLinks(text) {
-        var regex = /[#\/](\d+)/g, // TODO: Move these parameters to configuration
-            pattern = "http://tfs01vm:8080/tfs/web/UI/Pages/WorkItems/WorkItemEdit.aspx?id={$id}",
-            match = [], result = [];
-        while(match = regex.exec(text)) {
-            var href = pattern.replace("{$id}", match[1]);
-            var title = "#"+match[1];
-            result.push({href: href, title: title});
+        var match = [], result = [];
+        if (regex && urlPattern) {
+            while(match = regex.exec(text)) {
+                var href = urlPattern.replace("{$id}", match[1]);
+                var title = "#"+match[1];
+                result.push({href: href, title: title});
+            }
         }
         return result;
+    };
+
+    function loadConfiguration() {
+        baseUrl = AJS.contextPath();
+        if (baseUrl) {
+            AJS.$.ajax({
+                url: baseUrl + "/rest/buglink-admin/1.0/",
+                dataType: "json",
+                async: false,
+                success: function(config) {
+                    regex = new RegExp(config.regex, "g");
+                    urlPattern = config.urlTemplate;
+                    header = config.header;
+              }
+            });
+        }
     }
+
+
 })(AJS.$)
