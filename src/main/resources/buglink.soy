@@ -1,17 +1,21 @@
 {namespace com.episerver.buglink}
 
 /**
+ * @param header The header of the list
  * @param links The count of TODOs in this PR.
  */
 {template .prOverviewPanel}
-    <span>Related work items:</span>
-    <ul>
-    {foreach $link in $links}
-            <li >
-                <a href="{$link.href}" target="_blank">{$link.title}</a>
-            </li>
-        {ifempty}
-            <li>No related work items</li>
-        {/foreach}
-    </ul>
+    <div class="plugin-item">
+        <span class="aui-icon aui-icon-small buglink-icon"></span>
+        <span>{$header}</span>
+        <dl>
+        {foreach $link in $links}
+                <dt>
+                    <a href="{$link.href}" target="_blank">{$link.title}</a>
+                </dt>
+            {ifempty}
+                <dt>No related work items</dt>
+            {/foreach}
+        </dl>
+    </div>
 {/template}
