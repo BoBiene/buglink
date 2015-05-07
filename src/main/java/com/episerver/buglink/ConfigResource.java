@@ -74,12 +74,6 @@ public class ConfigResource
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@Context HttpServletRequest request)
     {
-        String username = userManager.getRemoteUsername(request);
-        if (username == null || !userManager.isSystemAdmin(username))
-        {
-            return Response.status(Status.UNAUTHORIZED).build();
-        }
-
         return Response.ok(transactionTemplate.execute(new TransactionCallback()
         {
             public Object doInTransaction()

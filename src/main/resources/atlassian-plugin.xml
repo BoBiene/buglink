@@ -65,10 +65,4 @@
     <rest key="rest" path="/buglink-admin" version="1.0">
         <description>Provides REST resources for the admin UI.</description>
     </rest>
-
-    <web-item key="refapp-menu-item" name="Buglink Admin" section="system.admin/general" weight="10" application="refapp">
-        <description>Link to xproduct-admin page.</description>
-        <label key="buglink.admin.label" />
-        <link linkId="buglink-admin-link">/plugins/servlet/buglink/admin</link>
-    </web-item>
 </atlassian-plugin>

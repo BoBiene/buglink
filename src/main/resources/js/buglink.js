@@ -33,19 +33,21 @@
                 links = links.concat(getLinks(pr.attributes.fromRef.attributes.displayId));
             }
 
-            var url = baseUrl + "/rest/api/1.0/projects/"+project.attributes.key
-                        +"/repos/"+repository.attributes.slug
-                        +"/pull-requests/"+pr.attributes.id
-                        +"/commits?withCounts=true";
-            $.ajax({
-                url: url,
-                success: function(data) {
-                    $.each(data.values, function(i, commit) {
-                        links = links.concat(getLinks(commit.message));
-                    })
-                },
-                async: false // TODO: Consider async: true, when this is fixed https://jira.atlassian.com/browse/STASH-7330
-            });
+            if (typeof baseUrl != "undefined") {
+                var url = baseUrl + "/rest/api/1.0/projects/"+project.attributes.key
+                            +"/repos/"+repository.attributes.slug
+                            +"/pull-requests/"+pr.attributes.id
+                            +"/commits?withCounts=true";
+                $.ajax({
+                    url: url,
+                    success: function(data) {
+                        $.each(data.values, function(i, commit) {
+                            links = links.concat(getLinks(commit.message));
+                        })
+                    },
+                    async: false // TODO: Consider async: true, when this is fixed https://jira.atlassian.com/browse/STASH-7330
+                });
+            }
         }
 
         var seen = {}, uniqueLinks = $.grep(links, function(l) {
@@ -71,7 +73,7 @@
 
     function loadConfiguration() {
         baseUrl = AJS.contextPath();
-        if (baseUrl) {
+        if (typeof baseUrl != "undefined") {
             AJS.$.ajax({
                 url: baseUrl + "/rest/buglink-admin/1.0/",
                 dataType: "json",
