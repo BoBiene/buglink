@@ -28,12 +28,17 @@ public class ConfigResource
     @XmlAccessorType(XmlAccessType.FIELD)
     public static final class Config
     {
+        @XmlElement private String header;
         @XmlElement private String regex;
         @XmlElement private String urlTemplate;
 
+        public String getHeader() { return this.header; }
+
+        public void setHeader(String header) { this.header = header;}
+
         public String getRegex()
         {
-            return regex;
+            return this.regex;
         }
 
         public void setRegex(String regex)
@@ -81,8 +86,8 @@ public class ConfigResource
             {
                 PluginSettings settings = pluginSettingsFactory.createGlobalSettings();
                 Config config = new Config();
+                config.setHeader((String) settings.get(Config.class.getName() + ".header"));
                 config.setRegex((String) settings.get(Config.class.getName() + ".regex"));
-
                 config.setUrlTemplate((String) settings.get(Config.class.getName() + ".urlTemplate"));
 
                 return config;
@@ -105,8 +110,9 @@ public class ConfigResource
             public Object doInTransaction()
             {
                 PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
+                pluginSettings.put(Config.class.getName() + ".header", config.getHeader());
                 pluginSettings.put(Config.class.getName() + ".regex", config.getRegex());
-                pluginSettings.put(Config.class.getName()  +".urlTemplate", config.getUrlTemplate());
+                pluginSettings.put(Config.class.getName() + ".urlTemplate", config.getUrlTemplate());
                 return null;
             }
         });

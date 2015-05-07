@@ -9,17 +9,25 @@
     <div id="aui-message-bar"></div>
     <h1>Buglink plugin settings</h1>
     <div class="field-group">
+        <label for="headerText">Header text:</label>
+        <input type="text" id="headerText" name="header" class="text"></input>
+        <div class="description">Please, provide a header text for the related work items list</div>
+    </div>
+
+    <div class="field-group">
         <label for="regex">Regular expression:</label>
         <input type="text" id="regex" name="regex" class="text"></input>
         <div class="description">Please, provide a regular expression to use for parsing work item ID. Expression should have a group. A value parsed from the group should match the work item ID</div>
         <div class="description">Example regular expression: [#\/](\d+)</div>
     </div>
+
     <div class="field-group">
         <label for="urlTemplate">URL template:</label>
         <input type="text" id="urlTemplate" name="urlTemplate" class="text"></input>
         <div class="description">Please, provide a URL template here. Parsed work item ID will use placeholder {$id}</div>
         <div class="description">Example URL template: http://tfs01vm:8080/tfs/web/UI/Pages/WorkItems/WorkItemEdit.aspx?id={$id}</div>
     </div>
+
     <div class="field-group">
         <input type="submit" value="$i18n.getText("buglink.admin.save.label")" class="button">
     </div>

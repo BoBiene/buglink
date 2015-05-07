@@ -6,6 +6,7 @@ AJS.toInit(function() {
       url: baseUrl + "/rest/buglink-admin/1.0/",
       dataType: "json",
       success: function(config) {
+        AJS.$("#headerText").attr("value", config.header);
         AJS.$("#regex").attr("value", config.regex);
         AJS.$("#urlTemplate").attr("value", config.urlTemplate);
       }
@@ -13,6 +14,7 @@ AJS.toInit(function() {
   }
   function updateConfig() {
     var data = {
+        header: AJS.$("#headerText").attr("value"),
         regex: AJS.$("#regex").attr("value"),
         urlTemplate: AJS.$("#urlTemplate").attr("value")
     }

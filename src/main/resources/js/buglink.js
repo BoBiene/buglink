@@ -1,9 +1,17 @@
 (function($) {
-    var baseUrl, regex, urlPattern;
+    var baseUrl, regex, header, urlPattern, bugs;
 
     window.episerver = window.episerver || {};
     window.episerver.buglink = episerver.buglink || {};
+
+    window.episerver.buglink.isAnyBugLink = function() {
+        bugs = window.episerver.buglink.getBugs();
+        return bugs && bugs.links && bugs.links.length > 0;
+    };
     window.episerver.buglink.getBugs = function(context) {
+        if (bugs) {
+            return bugs;
+        }
         loadConfiguration();
         var pr = require('model/page-state').getPullRequest(),
             project = require('model/page-state').getProject(),
@@ -36,7 +44,7 @@
                         links = links.concat(getLinks(commit.message));
                     })
                 },
-                async: false // TODO: Consider async: true, when find how to render SOY template with async data
+                async: false // TODO: Consider async: true, when this is fixed https://jira.atlassian.com/browse/STASH-7330
             });
         }
 
@@ -47,7 +55,7 @@
             seen[l.title] = true;
             return true;
         });
-        return {links: uniqueLinks};
+        return {links: uniqueLinks, header: header || ""};
     };
     function getLinks(text) {
         var match = [], result = [];
@@ -71,6 +79,7 @@
                 success: function(config) {
                     regex = new RegExp(config.regex, "g");
                     urlPattern = config.urlTemplate;
+                    header = config.header;
               }
             });
         }
