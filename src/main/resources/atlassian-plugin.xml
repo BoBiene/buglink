@@ -25,7 +25,7 @@
         <context>buglink</context>
 
         <dependency>com.atlassian.auiplugin:ajs</dependency>
-        <dependency>com.atlassian.stash.stash-web-api:pull-request-web-panels</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web-api:pull-request-web-panels</dependency>
 
     </web-resource>
 
@@ -39,7 +39,7 @@
     <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" />
     <template-context-item key="applicationPropertiesContextItem" component-ref="applicationProperties"
                            context-key="applicationProperties" name="Application Properties Context Item"/>
-    <client-web-panel name="Related Work Items" key="pr-overview-related-bugs" location="stash.pull-request.related-entities" weight="2000">
+    <client-web-panel name="Related Work Items" key="pr-overview-related-bugs" location="bitbucket.pull-request.related-entities" weight="2000">
         <client-context-provider>episerver.buglink.getBugs</client-context-provider>
         <client-condition>window.episerver.buglink.isAnyBugLink</client-condition>
         <resource name="view" type="soy" location="com.episerver.buglink.buglink:buglink-resources/com.episerver.buglink.prOverviewPanel" />

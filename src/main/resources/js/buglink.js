@@ -13,30 +13,27 @@
             return bugs;
         }
         loadConfiguration();
-        var pr = require('model/page-state').getPullRequest(),
-            project = require('model/page-state').getProject(),
-            repository = require('model/page-state').getRepository(),
+        var pr = require('bitbucket/util/state').getPullRequest(),
+            project = require('bitbucket/util/state').getProject(),
+            repository = require('bitbucket/util/state').getRepository(),
             links = [];
 
-        if (pr && pr.attributes
-            && project && project.attributes
-            && repository && repository.attributes) {
+        if (pr && project && repository ) {
 
-            if (pr.attributes.title) {
-                links = links.concat(getLinks(pr.attributes.title));
+            if (pr.title) {
+                links = links.concat(getLinks(pr.title));
             }
-            if (pr.attributes.description) {
-                links = links.concat(getLinks(pr.attributes.description));
+            if (pr.description) {
+                links = links.concat(getLinks(pr.description));
             }
-            if (pr.attributes.fromRef && pr.attributes.fromRef.attributes
-                && pr.attributes.fromRef.attributes.displayId) {
-                links = links.concat(getLinks(pr.attributes.fromRef.attributes.displayId));
+            if (pr.fromRef && pr.fromRef.displayId) {
+                links = links.concat(getLinks(pr.fromRef.displayId));
             }
 
             if (typeof baseUrl != "undefined") {
-                var url = baseUrl + "/rest/api/1.0/projects/"+project.attributes.key
-                            +"/repos/"+repository.attributes.slug
-                            +"/pull-requests/"+pr.attributes.id
+                var url = baseUrl + "/rest/api/1.0/projects/"+project.key
+                            +"/repos/"+repository.slug
+                            +"/pull-requests/"+pr.id
                             +"/commits?withCounts=true";
                 $.ajax({
                     url: url,
