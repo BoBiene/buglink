@@ -1,4 +1,4 @@
-This is an Atlassian Stash Plugin that shows information about related work items in a pull request.
+This is an Atlassian Bitbucket Plugin that shows information about related work items in a pull request.
 
 Atlassian SDK required in order to run the plugin in development mode. 
 Clone repository and run atlas-run from the source code root folder.
