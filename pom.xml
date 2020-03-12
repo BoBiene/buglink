@@ -117,40 +117,31 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>bitbucket-maven-plugin</artifactId>
                 <version>${amps.version}</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <!-- make AMPS faster -->
-                    <enableFastdev>false</enableFastdev>
-                    <enableDevToolbox>false</enableDevToolbox>
-                    <enablePde>false</enablePde>
-                    <skipRestDocGeneration>true</skipRestDocGeneration>
-                    <allowGoogleTracking>false</allowGoogleTracking>
-                    <skipManifestValidation>true</skipManifestValidation>
-                    <extractDependencies>false</extractDependencies>
-
+                    <compressResources>false</compressResources>
                     <products>
                         <product>
                             <id>bitbucket</id>
                             <instanceId>bitbucket</instanceId>
-                            <version>${bitbucket.version}</version>
+                            <version>${bitbucket.server.version}</version>
                             <dataVersion>${bitbucket.data.version}</dataVersion>
-                        </product>  
+                        </product>
                     </products>
-                    <pluginArtifact>
-                        <groupId>com.atlassian.labs.plugins</groupId>
-                        <artifactId>quickreload</artifactId>
-                        <version>${quick.reload.version}</version>
-                    </pluginArtifact>
                 </configuration>
             </plugin>
-            <plugin>
+           <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <compilerArgs>
+                        <arg>-Xlint:deprecation</arg>
+                    </compilerArgs>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
